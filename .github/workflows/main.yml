@@ -1,0 +1,92 @@
+name: Simple Usage
+
+on: push
+
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  convert_via_pandoc:  
+    runs-on: ubuntu-latest
+    container:
+      image: docker://pandoc/core:3
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3 # this gives the workflow access to your repository files
+      - name: Run Pandoc on main tex file
+        run: |
+          mkdir -p pandoc
+          pandoc -F pandoc-crossref --citeproc -t html -s -o pandoc/index.html main.tex
+          pandoc -F pandoc-crossref --citeproc --reference-doc style.dotx main.tex -o pandoc/article.docx  
+          mkdir -p pandoc/img
+          cp -r ./img pandoc/          
+          
+      - name: Upload artifact        
+        uses: actions/upload-artifact@v4
+        with:
+          name: pandoc_files        
+          path: 'pandoc/' # Upload entire repository
+
+  make_pdf:  
+    runs-on: ubuntu-latest
+    needs: convert_via_pandoc
+    container:
+      image: nanozoo/pdflatex:3.14159265--6263fbd
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+        
+      - name: Compile LaTeX to PDF
+        run: |
+          mkdir -p pdf
+          pdflatex -output-directory=pdf main.tex || true
+          biber pdf/main || true
+          pdflatex -output-directory=pdf main.tex || true
+          mv pdf/main.pdf pdf/article.pdf
+                          
+      - name: Upload PDF artifact        
+        uses: actions/upload-artifact@v4
+        with:
+          name: pdf_files
+          path: pdf/
+
+  # Deployment job
+  deploy:
+    needs: make_pdf
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download pandoc artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: pandoc_files
+          path: ./pandoc
+          
+      - name: Download pdf artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: pdf_files
+          path: ./pdf
+          
+      - name: Combine outputs into one directory
+        run: |
+          mkdir -p final          
+          cp  pandoc/index.html final/          
+          cp  pandoc/article.docx final/
+          cp -r pandoc/img final/
+          cp  pdf/article.pdf final/          
+          
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:          
+          path: 'final/'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
