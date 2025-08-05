@@ -30,28 +30,28 @@ jobs:
           name: pandoc_files        
           path: 'pandoc/' # Upload entire repository
 
-  make_pdf:  
-    runs-on: ubuntu-latest
-    needs: convert_via_pandoc
-    container:
-      image: nanozoo/pdflatex:3.14159265--6263fbd
-    steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v3
+  # make_pdf:  
+  #   runs-on: ubuntu-latest
+  #   needs: convert_via_pandoc
+  #   container:
+  #     image: nanozoo/pdflatex:3.14159265--6263fbd
+  #   steps:
+  #     - name: Checkout Repo
+  #       uses: actions/checkout@v3
         
-      - name: Compile LaTeX to PDF
-        run: |
-          mkdir -p pdf
-          pdflatex -output-directory=pdf main.tex || true
-          biber pdf/main || true
-          pdflatex -output-directory=pdf main.tex || true
-          mv pdf/main.pdf pdf/article.pdf
-                          
-      - name: Upload PDF artifact        
-        uses: actions/upload-artifact@v4
-        with:
-          name: pdf_files
-          path: pdf/
+  #     - name: Compile LaTeX to PDF
+  #       run: |
+  #         mkdir -p pdf
+  #         pdflatex -output-directory=pdf main.tex || true
+  #         biber pdf/main || true
+  #         pdflatex -output-directory=pdf main.tex || true
+  #         mv pdf/main.pdf pdf/article.pdf
+  #       continue-on-error: true           
+  #     - name: Upload PDF artifact        
+  #       uses: actions/upload-artifact@v4
+  #       with:
+  #         name: pdf_files
+  #         path: pdf/
 
   # Deployment job
   deploy:
