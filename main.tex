@@ -1,0 +1,46 @@
+\documentclass{article}
+
+% Language setting
+% Replace `english' with e.g. `spanish' to change the document language
+\usepackage[english]{babel}
+
+% Set page size and margins
+% Replace `letterpaper' with `a4paper' for UK/EU standard size
+\usepackage[letterpaper,top=2cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+
+\usepackage{setspace}
+\doublespacing
+
+% Useful packages
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{wasysym}
+\usepackage[full]{leadsheets}
+\useleadsheetslibraries{musicsymbols}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+% \usepackage{lilyglyphs}
+% \usepackage{fontspec}
+% \usepackage{musicography}
+%-------------------------------------------------------------------------------------
+% Bibliography Management
+\usepackage[notes,backend=biber,useibid=true]{biblatex-chicago}
+\bibliography{Zotero PhD Biblio}
+\DeclareBibliographyAlias{movie}{video}
+%-------------------------------------------------------------------------------------
+\newcommand{\timesig}[2]{${}^{#1}_{#2}$}
+%-------------------------------------------------------------------------------------
+\title{All the President's Men}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+
+\input{presidents-men}
+
+
+
+\clearpage
+\printbibliography [title=Bibliography,nottype=video]
+\printbibliography [title=Filmography,type=video]
+
+\end{document}
