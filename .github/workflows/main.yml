@@ -67,11 +67,11 @@ jobs:
           name: pandoc_files
           path: ./pandoc
           
-      - name: Download pdf artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: pdf_files
-          path: ./pdf
+      # - name: Download pdf artifact
+      #   uses: actions/download-artifact@v4
+      #   with:
+      #     name: pdf_files
+      #     path: ./pdf
           
       - name: Combine outputs into one directory
         run: |
@@ -79,7 +79,7 @@ jobs:
           cp  pandoc/index.html final/          
           cp  pandoc/article.docx final/
           cp -r pandoc/img final/
-          cp  pdf/article.pdf final/          
+          
           
       - name: Setup Pages
         uses: actions/configure-pages@v5
