@@ -55,7 +55,7 @@ jobs:
 
   # Deployment job
   deploy:
-    needs: make_pdf
+    needs: convert_via_pandoc
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
