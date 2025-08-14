@@ -24,7 +24,8 @@ jobs:
           sed -i  -e 's/\\autocite/\\footcite/g' presidents-men.tex
           mkdir -p pandoc
           pandoc -f latex -t html -F pandoc-crossref --citeproc -s -o pandoc/index.html main.tex
-          pandoc -f latex -t docx -F pandoc-crossref --citeproc -s --reference-doc style.dotx -o pandoc/article.docx main.tex
+          pandoc -f latex -t docx -F pandoc-crossref --citeproc -s  -o pandoc/article.docx main.tex
+          pandoc -f latex -t docx -F pandoc-crossref --citeproc -s  --csl cite-style.csl -o pandoc/alt.docx main.tex
           mkdir -p pandoc/img
           cp -r ./img pandoc/          
           
@@ -82,6 +83,7 @@ jobs:
           mkdir -p final          
           cp  pandoc/index.html final/          
           cp  pandoc/article.docx final/
+          cp  pandoc/alt.docx final/
           cp -r pandoc/img final/
           
           
