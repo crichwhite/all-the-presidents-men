@@ -18,10 +18,10 @@ jobs:
         uses: actions/checkout@v3 # this gives the workflow access to your repository files
       - name: Run Pandoc on main tex file
         run: |
-          sed -i '' -e 's/\\flat/♭/g' presidents-men.tex
-          sed -i '' -e 's/\\sharp/♯/g' presidents-men.tex
-          sed -i '' -e 's/\\citetitle/\\parencite/g' presidents-men.tex
-          sed -i '' -e 's/\\autocite/\\footcite/g' presidents-men.tex
+          sed -i  -e 's/\\flat/♭/g' presidents-men.tex
+          sed -i  -e 's/\\sharp/♯/g' presidents-men.tex
+          sed -i  -e 's/\\citetitle/\\parencite/g' presidents-men.tex
+          sed -i  -e 's/\\autocite/\\footcite/g' presidents-men.tex
           mkdir -p pandoc
           pandoc -f latex -t html -F pandoc-crossref --citeproc -s -o pandoc/index.html main.tex
           pandoc -f latex -t docx -F pandoc-crossref --citeproc -s -o pandoc/article.docx main.tex
