@@ -98,11 +98,11 @@ jobs:
           name: pandoc_files
           path: ./pandoc
           
-      - name: Download pdf artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: pdf_files
-          path: ./pdf
+      # - name: Download pdf artifact
+      #   uses: actions/download-artifact@v4
+      #   with:
+      #     name: pdf_files
+      #     path: ./pdf
           
       - name: Combine outputs into one directory
         run: |          
