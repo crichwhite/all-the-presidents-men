@@ -19,10 +19,13 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.11'  # or any version you want  
-      - name: Run Pandoc on main tex file
+          python-version: '3.9'  # or any version you want  
+      - name: Set textcites
         run: |
-          python test_cite.py
+          python text_cite.py
+          
+      - name: Run Pandoc on main tex file
+        run: |          
           sed -i  -e 's/\\flat/♭/g' presidents-men.tex
           sed -i  -e 's/\\sharp/♯/g' presidents-men.tex
           sed -i  -e 's/\\citetitle/\\textcite/g' presidents-men.tex
