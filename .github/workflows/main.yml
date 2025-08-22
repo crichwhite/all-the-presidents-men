@@ -1,4 +1,4 @@
-name: Simple Usage
+name: Make Documents
 
 on: push
 
@@ -16,8 +16,13 @@ jobs:
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v3 # this gives the workflow access to your repository files
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'  # or any version you want  
       - name: Run Pandoc on main tex file
         run: |
+          python test_cite.py
           sed -i  -e 's/\\flat/♭/g' presidents-men.tex
           sed -i  -e 's/\\sharp/♯/g' presidents-men.tex
           sed -i  -e 's/\\citetitle/\\textcite/g' presidents-men.tex
