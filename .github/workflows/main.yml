@@ -30,8 +30,8 @@ jobs:
   convert_via_pandoc:  
     runs-on: ubuntu-latest
     needs: set_textcite
-    # container:
-    #   image: docker://pandoc/core:3
+    container:
+      image: docker://pandoc/core:3
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v3 # this gives the workflow access to your repository files
