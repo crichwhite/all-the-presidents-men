@@ -33,6 +33,7 @@ for entry in entries:
     title = raw_title[raw_title.find('{')+1:-1]
     director = entry[entry.find('author'):]
     director = director[director.find('{') + 1:director.find('}')]
+    director = " ".join(director.split(',')[::-1]).strip()
     cite_dict[cite_key] = {'title':title, 'year':cite_key[-4:],'director':director}
 
 
