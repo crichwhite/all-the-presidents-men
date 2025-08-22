@@ -38,7 +38,7 @@ for entry in entries:
 
 with fileinput.FileInput('presidents-men.tex', inplace=True, backup='.bak') as file:
     for line in file:
-        temp_line = line.replace("paranoid", "WIBBLE")
+        temp_line = line
         for cite_key in cite_dict.keys():
             if f"\\citetitle{{{cite_key}}}" in line:
                 temp_line = temp_line.replace(f"\\citetitle{{{cite_key}}}", f"{cite_dict[cite_key]['title']} ({cite_dict[cite_key]['director']}, {cite_dict[cite_key]['year']})")
