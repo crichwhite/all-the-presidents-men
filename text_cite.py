@@ -34,7 +34,7 @@ for entry in entries:
     director = entry[entry.find('author'):]
     director = director[director.find('{') + 1:director.find('}')]
     director = " ".join(director.split(',')[::-1]).strip()
-    cite_dict[cite_key] = {'title':title, 'year':cite_key[-4:],'director':director}
+    cite_dict[cite_key] = {'title':title, 'year':cite_key[-4:],'director':director, 'first_cite': True}
 
 
 with fileinput.FileInput('presidents-men.tex', inplace=True, backup='.bak') as file:
@@ -42,8 +42,12 @@ with fileinput.FileInput('presidents-men.tex', inplace=True, backup='.bak') as f
         temp_line = line
         for cite_key in cite_dict.keys():
             if f"\\citetitle{{{cite_key}}}" in line:
-                temp_line = temp_line.replace(f"\\citetitle{{{cite_key}}}", f"{cite_dict[cite_key]['title']} ({cite_dict[cite_key]['director']}, {cite_dict[cite_key]['year']})")
+                if cite_dict[cite_key]['first_cite']:
+                    temp_line = temp_line.replace(f"\\citetitle{{{cite_key}}}",
+                                                  f"\\textit{{{cite_dict[cite_key]['title']}}} ({cite_dict[cite_key]['director']}, {cite_dict[cite_key]['year']})")
+                    cite_dict[cite_key]['first_cite'] = False
+                else:
+                    temp_line = temp_line.replace(f"\\citetitle{{{cite_key}}}",
+                                                  f"\\textit{{{cite_dict[cite_key]['title']}}}")
 
         print(temp_line, end='')
-
-pprint(cite_dict)
