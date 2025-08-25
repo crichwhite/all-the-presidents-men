@@ -34,8 +34,17 @@ for entry in entries:
     director = entry[entry.find('author'):]
     director = director[director.find('{') + 1:director.find('}')]
     director = " ".join(director.split(',')[::-1]).strip()
-    cite_dict[cite_key] = {'title':title, 'year':cite_key[-4:],'director':director, 'first_cite': True}
-
+    author = entry[entry.find('author'):]
+    author = author[author.find('{') + 1:author.find('}')]
+    publisher = entry[entry.find('publisher'):]
+    publisher = publisher[publisher.find('{') + 1:publisher.find('}')]
+    cite_dict[cite_key] = {'title':title,
+                           'year':cite_key[-4:],
+                           'director':director,
+                           'publisher':publisher,
+                           'first_cite': True,
+                           'author':author,
+                           'cite_key':cite_key}
 
 with fileinput.FileInput('presidents-men.tex', inplace=True, backup='.bak') as file:
     for line in file:
@@ -51,3 +60,21 @@ with fileinput.FileInput('presidents-men.tex', inplace=True, backup='.bak') as f
                                                   f"\\textit{{{cite_dict[cite_key]['title']}}}")
 
         print(temp_line, end='')
+
+filmography = [cite_dict[cite_key] for cite_key in cite_dict.keys() if not cite_dict[cite_key]['first_cite']]
+filmography = sorted(filmography, key=lambda d: d['title'])
+filmography = sorted(filmography, key=lambda d: d['author'])
+
+with open("presidents-men.tex", "a") as tex_file:
+    tex_file.write("\n\section{Filmography}\n\n")
+
+    previous_director = ""
+    for film in filmography:
+        link = r"\bibitem[\citeproctext]{" + film['cite_key'] + "}\n"
+        director = film['director']
+        if director == previous_director:
+            director = "---------"
+        filmography_line = link + f"{director} \\textit{{{film['title']}}} ({film['year']}), {film['publisher']}.\n\n"
+        previous_director = film['director']
+        tex_file.write(filmography_line)
+
