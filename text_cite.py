@@ -62,7 +62,7 @@ with fileinput.FileInput('presidents-men.tex', inplace=True, backup='.bak') as f
         print(temp_line, end='')
 
 filmography = [cite_dict[cite_key] for cite_key in cite_dict.keys() if not cite_dict[cite_key]['first_cite']]
-filmography = sorted(filmography, key=lambda d: d['title'])
+filmography = sorted(filmography, key=lambda d: d['title'] if not d['title'].startswith('The') else d['title'][4:])
 filmography = sorted(filmography, key=lambda d: d['author'])
 
 with open("presidents-men.tex", "a") as tex_file:
