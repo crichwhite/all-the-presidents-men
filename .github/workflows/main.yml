@@ -21,6 +21,7 @@ jobs:
       - name: Set textcites
         run: |
           python text_cite.py
+          printf '\n\\section{Bibliography}\n' >> presidents-men.tex
       - name: Upload artifact        
         uses: actions/upload-artifact@v4
         with:
